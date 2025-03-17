@@ -2,7 +2,7 @@ import { Colors } from "@/constants/Colors";
 import destinationCategories from "@/data/Categories";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRef, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Platform } from "react-native";
 import { ScrollView } from "react-native";
 
 type Props = {
@@ -38,16 +38,25 @@ const CategorieButtons = ({onCagtegoryChanged}: Props) => {
         }}>
             {destinationCategories.map((item, index) => (
                 <>
-                <TouchableOpacity key={index} ref={(el) => (itemRefs.current[index] = el)} onPress={() => {handleSelectCategory(index)}} style={activeIndex == index ? styles.categoryBtnActive : styles.categoryBtn}>
+                <TouchableOpacity 
+                    key={index} 
+                    ref={(el) => (itemRefs.current[index] = el)} 
+                    onPress={() => handleSelectCategory(index)} 
+                    style={activeIndex == index ? styles.categoryBtnActive : styles.categoryBtn}
+                >
+                    {Platform.OS !== 'web' && (
+                        <MaterialCommunityIcons
+                            name={item.iconName as any}
+                            size={20}
+                            color={activeIndex == index ? Colors.white : Colors.black}
+                        />
+                    )}
                     
-                    <MaterialCommunityIcons
-                    name={item.iconName as any}
-                    size={20}
-                    color={activeIndex == index ?
-                    Colors.white :
-                    Colors.black} />
-                    <Text style={activeIndex == index ? styles.categoryBtnTxtActive : styles.categoryBtnTxt}>{item.title}</Text>
-                </TouchableOpacity></>
+                    <Text style={activeIndex == index ? styles.categoryBtnTxtActive : styles.categoryBtnTxt}>
+                        {item.title}
+                    </Text>
+                </TouchableOpacity>
+            </>
             ))}
         </ScrollView>
     </View>
